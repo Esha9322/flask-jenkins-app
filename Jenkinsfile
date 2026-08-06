@@ -2,13 +2,6 @@ pipeline {
 
     agent any
 
-    environment {
-        IMAGE_NAME = "flask-app"
-        IMAGE_TAG = "v1"
-        CONTAINER_NAME = "flask-container"
-        DOCKER_REPO = "esha93/flask-app"
-    }
-
     stages {
 
         stage('Clone Repository') {
@@ -31,85 +24,70 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                echo "Building Docker Image..."
-                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                sh 'docker build -t flask-app:v1 .'
             }
         }
 
         stage('Tag Docker Image') {
             steps {
-                echo "Tagging Docker Image..."
-                sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_REPO}:${IMAGE_TAG}'
-            }
-        }
-
-        stage('Docker Login') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh '''
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    '''
-                }
+                sh 'docker tag flask-app:v1 esha93/flask-app:v1'
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                echo "Pushing Docker Image to Docker Hub..."
-                sh 'docker push ${DOCKER_REPO}:${IMAGE_TAG}'
+                sh 'docker push esha93/flask-app:v1'
             }
         }
 
-        stage('Remove Old Container') {
+        stage('Deploy to EC2') {
             steps {
                 sh '''
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
-                '''
-            }
-        }
+                ssh -o StrictHostKeyChecking=no ubuntu@54.173.179.56 << EOF
 
-        stage('Run Docker Container') {
-            steps {
-                sh '''
+                docker pull esha93/flask-app:v1
+
+                docker stop flask-container || true
+                docker rm flask-container || true
+
                 docker run -d \
-                --name ${CONTAINER_NAME} \
-                -p 5000:5000 \
-                ${IMAGE_NAME}:${IMAGE_TAG}
+                  --name flask-container \
+                  -p 5000:5000 \
+                  esha93/flask-app:v1
+
+                EOF
                 '''
             }
         }
 
-        stage('Verify Running Container') {
+        stage('Verify Deployment') {
             steps {
-                sh 'docker ps'
+                sh '''
+                ssh -o StrictHostKeyChecking=no ubuntu@54.173.179.56 << EOF
+
+                docker ps
+
+                EOF
+                '''
             }
         }
+
     }
 
     post {
 
         success {
-            echo "===================================="
-            echo "Pipeline Executed Successfully!"
-            echo "Docker Image pushed to Docker Hub."
-            echo "Flask Application is Running."
-            echo "===================================="
+            echo "Pipeline Finished."
+            echo "Application deployed successfully using Docker on EC2."
         }
 
         failure {
-            echo "===================================="
-            echo "Pipeline Failed!"
-            echo "Check the Jenkins Console Output."
-            echo "===================================="
+            echo "Pipeline Failed."
         }
 
         always {
-            echo "Pipeline Finished."
+            echo "CI/CD Pipeline Completed."
         }
     }
+
 }
