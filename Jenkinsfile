@@ -6,6 +6,7 @@ pipeline {
         IMAGE_NAME = "flask-app"
         IMAGE_TAG = "v1"
         CONTAINER_NAME = "flask-container"
+        DOCKER_REPO = "esha93/flask-app"
     }
 
     stages {
@@ -30,19 +31,36 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                echo "Building Docker Image..."
                 sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
             }
         }
 
         stage('Tag Docker Image') {
             steps {
-                sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} esha93/${IMAGE_NAME}:${IMAGE_TAG}'
+                echo "Tagging Docker Image..."
+                sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_REPO}:${IMAGE_TAG}'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    '''
+                }
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                sh 'docker push esha93/${IMAGE_NAME}:${IMAGE_TAG}'
+                echo "Pushing Docker Image to Docker Hub..."
+                sh 'docker push ${DOCKER_REPO}:${IMAGE_TAG}'
             }
         }
 
@@ -71,17 +89,23 @@ pipeline {
                 sh 'docker ps'
             }
         }
-
     }
 
     post {
 
         success {
-            echo "Application deployed successfully using Docker."
+            echo "===================================="
+            echo "Pipeline Executed Successfully!"
+            echo "Docker Image pushed to Docker Hub."
+            echo "Flask Application is Running."
+            echo "===================================="
         }
 
         failure {
-            echo "Pipeline Failed."
+            echo "===================================="
+            echo "Pipeline Failed!"
+            echo "Check the Jenkins Console Output."
+            echo "===================================="
         }
 
         always {
