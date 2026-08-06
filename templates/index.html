@@ -1,25 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-    <title>Flask CI/CD Project</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
+    <title>Flask CI/CD Pipeline Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
 <div class="container">
 
-    <h1>🚀 Flask CI/CD Project</h1>
+    <h1>🚀 Flask CI/CD Pipeline Project</h1>
 
-    <p>Created by Esha Vasale</p>
+    <p>
+        This project demonstrates a complete CI/CD pipeline using
+        <strong>Jenkins, Docker, Docker Hub, GitHub, and AWS EC2.</strong>
+    </p>
 
-    <p>Integrated with Jenkins</p>
+    <hr>
 
-    <p>Next Step → Docker 🐳</p>
+    <h2>📌 Why I Created This Project</h2>
+
+    <p>
+        I wanted to learn how modern DevOps teams automate application deployment.
+        Instead of manually copying files to a server, I built a pipeline that
+        automatically builds and deploys my Flask application whenever I push
+        changes to GitHub.
+    </p>
+
+    <hr>
+
+    <h2>🛠 Technologies Used</h2>
+
+    <ul>
+        <li>Python</li>
+        <li>Flask</li>
+        <li>Git & GitHub</li>
+        <li>Jenkins</li>
+        <li>Docker</li>
+        <li>Docker Hub</li>
+        <li>AWS EC2</li>
+        <li>Linux (Ubuntu)</li>
+    </ul>
+
+    <hr>
+
+    <h2>⚙ CI/CD Pipeline Workflow</h2>
+
+    <ol>
+        <li>Developer pushes code to GitHub</li>
+        <li>Jenkins clones the repository</li>
+        <li>Python dependencies are installed</li>
+        <li>Docker image is built</li>
+        <li>Image is pushed to Docker Hub</li>
+        <li>Jenkins connects to AWS EC2 using SSH</li>
+        <li>EC2 pulls the latest Docker image</li>
+        <li>Old container is removed</li>
+        <li>New Docker container is started</li>
+        <li>Updated application is deployed automatically</li>
+    </ol>
+
+    <hr>
+
+    <h2>✅ Project Outcome</h2>
+
+    <p>
+        This project helped me understand Continuous Integration and Continuous Deployment (CI/CD),
+        Docker containerization, automated deployments, and cloud application hosting using AWS.
+    </p>
+
+    <br>
+
+    <h3>Created by</h3>
+
+    <p><strong>Esha Vasale</strong></p>
 
 </div>
 
