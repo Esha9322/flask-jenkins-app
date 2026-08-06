@@ -4,7 +4,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "flask-app"
-        IMAGE_TAG  = "v1"
+        IMAGE_TAG = "v1"
         CONTAINER_NAME = "flask-container"
     }
 
@@ -31,6 +31,18 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+            }
+        }
+
+        stage('Tag Docker Image') {
+            steps {
+                sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} esha93/${IMAGE_NAME}:${IMAGE_TAG}'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh 'docker push esha93/${IMAGE_NAME}:${IMAGE_TAG}'
             }
         }
 
@@ -76,5 +88,4 @@ pipeline {
             echo "Pipeline Finished."
         }
     }
-
 }
