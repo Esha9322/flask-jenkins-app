@@ -43,32 +43,21 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 sh '''
-                ssh -o StrictHostKeyChecking=no ubuntu@54.173.179.56 << EOF
-
-                docker pull esha93/flask-app:v1
-
-                docker stop flask-container || true
-                docker rm flask-container || true
-
-                docker run -d \
-                  --name flask-container \
-                  -p 5000:5000 \
-                  esha93/flask-app:v1
-
-                EOF
-                '''
+ssh -o StrictHostKeyChecking=no ubuntu@54.173.179.56 "
+docker pull esha93/flask-app:v1 &&
+docker stop flask-container || true &&
+docker rm flask-container || true &&
+docker run -d --name flask-container -p 5000:5000 esha93/flask-app:v1
+"
+'''
             }
         }
 
         stage('Verify Deployment') {
             steps {
                 sh '''
-                ssh -o StrictHostKeyChecking=no ubuntu@54.173.179.56 << EOF
-
-                docker ps
-
-                EOF
-                '''
+ssh -o StrictHostKeyChecking=no ubuntu@54.173.179.56 "docker ps"
+'''
             }
         }
 
@@ -77,16 +66,20 @@ pipeline {
     post {
 
         success {
-            echo "Pipeline Finished."
-            echo "Application deployed successfully using Docker on EC2."
+            echo "====================================="
+            echo "Pipeline Completed Successfully!"
+            echo "Application deployed to EC2."
+            echo "====================================="
         }
 
         failure {
+            echo "====================================="
             echo "Pipeline Failed."
+            echo "====================================="
         }
 
         always {
-            echo "CI/CD Pipeline Completed."
+            echo "CI/CD Pipeline Finished."
         }
     }
 
