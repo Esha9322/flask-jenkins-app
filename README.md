@@ -74,8 +74,7 @@ Deployment verification through Jenkins
 
 # CI/CD Workflow
 
-Developer --> GitHub --> Jenkins --> Checkout Source Code --> Install Dependencies --> Verify Flask --> Docker Build --> Docker Tag --> Docker Hub --> Jenkins → SSH --> 
---> AWS EC2 --> Docker Pull --> Stop Old Container --> Remove Old Container --> Start New Docker Container --> Flask Application --> Verify Deployment
+Developer  --> GitHub  --> Jenkins  --> Checkout Source Code  --> Install Dependencies  --> Verify Flask  --> Docker Build  --> Docker Tag  --> Docker Hub  --> Jenkins  → SSH  --> AWS EC2  --> Docker Pull  --> Stop Old Container  --> Remove Old Container  --> Start New Docker Container  --> Flask Application  --> Verify Deployment
 
 
 # Jenkins–EC2 Integration
@@ -102,7 +101,7 @@ Exposes the application through port 5000
 
 ## 📁 Project Structure
 
-Python dependencies -> Docker image configuration -> Jenkins CI/CD pipeline -> Project documentation  -> Flask HTML template -> Application styling
+Python dependencies  -->  Docker image configuration  -->  Jenkins CI/CD pipeline  -->  Project documentation  - ->  Flask HTML template  -->  Application styling
 
 # Why I Built This Project
 
