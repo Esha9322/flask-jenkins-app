@@ -77,7 +77,9 @@ Deployment verification through Jenkins
 GitHub
    │
    ▼
+   
 Jenkins
+
    │
    ├── Checkout Source Code
    ├── Install Dependencies
@@ -85,9 +87,11 @@ Jenkins
    ├── Build Docker Image
    ├── Tag Image
    ▼
+   
 Docker Hub
    │
    ▼
+   
 Jenkins → SSH → AWS EC2
                     │
                     ├── Pull Docker Image
@@ -124,6 +128,7 @@ Exposes the application through port 5000
 # Project Structure
 
 flask-jenkins-app/
+
 │
 ├── app.py
 ├── requirements.txt
