@@ -74,97 +74,8 @@ Deployment verification through Jenkins
 
 # CI/CD Workflow
 
-┌─────────────────────────┐
-│        Developer        │
-│   Push Code to GitHub   │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│         GitHub          │
-│   Source Code Repository│
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│         Jenkins         │
-│      CI/CD Pipeline     │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│    Checkout Source Code │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│   Install Dependencies  │
-│   pip install -r ...    │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│      Verify Flask      │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│    Build Docker Image   │
-│      flask-app:v1       │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│    Tag Docker Image     │
-│ esha93/flask-app:v1     │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│       Docker Hub        │
-│    Push Docker Image    │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│     Jenkins → SSH       │
-│    Connect to EC2       │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│       AWS EC2           │
-│     Ubuntu Server       │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│    Pull Docker Image    │
-│   from Docker Hub       │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│    Stop Old Container   │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│    Remove Old Container │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│    Start New Container  │
-│    Flask Application    │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│   Verify Deployment     │
-│   Docker Container      │
-│       Running           │
-└─────────────────────────┘
+Developer --> GitHub --> Jenkins --> Checkout Source Code --> Install Dependencies --> Verify Flask --> Docker Build --> Docker Tag --> Docker Hub --> Jenkins → SSH --> 
+--> AWS EC2 --> Docker Pull --> Stop Old Container --> Remove Old Container --> Start New Docker Container --> Flask Application --> Verify Deployment
 
 
 # Jenkins–EC2 Integration
@@ -191,46 +102,7 @@ Exposes the application through port 5000
 
 ## 📁 Project Structure
 
-┌──────────────────────────────┐
-│      flask-jenkins-app       │
-└──────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ app.py                       │
-│ Flask Application            │
-└──────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ requirements.txt             │
-│ Python Dependencies          │
-└──────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ Dockerfile                   │
-│ Docker Configuration         │
-└──────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ Jenkinsfile                  │
-│ CI/CD Pipeline               │
-└──────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ templates/index.html         │
-│ Frontend Page                │
-└──────────────────────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ static/style.css             │
-│ Application Styling          │
-└──────────────────────────────┘
-
+Python dependencies -> Docker image configuration -> Jenkins CI/CD pipeline -> Project documentation  -> Flask HTML template -> Application styling
 
 # Why I Built This Project
 
