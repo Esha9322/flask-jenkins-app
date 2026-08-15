@@ -43,7 +43,7 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 sh '''
-ssh -o StrictHostKeyChecking=no ubuntu@54.152.235.81 "
+ssh -o StrictHostKeyChecking=no ubuntu@52.201.231.157 "
 docker pull esha93/flask-app:v1 &&
 docker stop flask-container || true &&
 docker rm flask-container || true &&
@@ -56,7 +56,7 @@ docker run -d --name flask-container -p 5000:5000 esha93/flask-app:v1
         stage('Verify Deployment') {
             steps {
                 sh '''
-ssh -o StrictHostKeyChecking=no ubuntu@54.152.235.81 "docker ps"
+ssh -o StrictHostKeyChecking=no ubuntu@52.201.231.157 "docker ps"
 '''
             }
         }
