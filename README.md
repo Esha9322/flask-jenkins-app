@@ -134,4 +134,3 @@ Blue-green or rolling deployments
 
 
 
-Webhook test - Jenkins auto trigger
